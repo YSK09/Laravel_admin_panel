@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Contracts\Role;
+use Spatie\Permission\Models\Role as ModelsRole;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,5 +23,10 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::get('/posts/create',[PostController::class,'create'])->name('create.post')->middleware('permission:write post');
+// Route::get('/posts/{post}/edit',[PostController::class, 'edit'])->name('edit.post');
+Route::get('/posts/{post}/edit', [PostController::class, 'edit'])->name('posts.edit')->middleware('role:editor|admin');
 
 require __DIR__.'/auth.php';
